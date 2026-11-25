@@ -1,0 +1,18 @@
+name: Publicar versión
+on:
+  push:
+    paths: ['version.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Crear release con el APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          N=$(tr -d '[:space:]' < version.txt)
+          gh release create "v0.1.$N" DocuCampo.apk --title "DocuCampo 0.1.$N beta" --notes "Versión de prueba. Solo contiene la app; nunca documentos ni links."
